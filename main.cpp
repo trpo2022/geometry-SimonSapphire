@@ -42,13 +42,15 @@ int check_circle(string figure) {
     return 7;
   }
 
-  return 0;
+  return 200;
 }
 
-void get_circle_data(string figure, double circle_data[]) {
+void get_circle_data(string figure, double circle_data[], string& figure_type) {
   int k = 0;
   string temp;
   cmatch result;
+
+  figure_type = "circle";
 
   regex_match(
       figure.c_str(), result,
@@ -68,14 +70,15 @@ void get_circle_data(string figure, double circle_data[]) {
 }
 
 int main(int argc, char** argv) {
-  string figure;
+  string figure, figure_type;
   double circle_data[3];
 
   cout << "Enter a figure: " << endl;
   getline(cin, figure);
-  if (check_circle(figure) == 0) {
-    get_circle_data(figure, circle_data);
+  if (check_circle(figure) == 200) {
+    get_circle_data(figure, circle_data, figure_type);
 
+    cout << figure_type << endl;
     for (int i = 0; i < 3; i++) {
       cout << circle_data[i] << endl;
     }
