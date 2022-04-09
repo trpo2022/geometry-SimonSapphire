@@ -45,6 +45,19 @@ int check_circle(string figure) {
   return 200;
 }
 
+string get_figure_type(string figure) {
+  string figure_type;
+
+  for (auto &ch : figure) {
+    if (ch == '('){
+      break;
+    }
+    figure_type += ch;
+  }
+
+  return figure_type;
+}
+
 void get_circle_data(string figure, double circle_data[], string& figure_type) {
   int k = 0;
   string temp;
@@ -71,18 +84,10 @@ void get_circle_data(string figure, double circle_data[], string& figure_type) {
 
 int main(int argc, char** argv) {
   string figure, figure_type;
-  double circle_data[3];
 
   cout << "Enter a figure: " << endl;
   getline(cin, figure);
-  if (check_circle(figure) == 200) {
-    get_circle_data(figure, circle_data, figure_type);
-
-    cout << figure_type << endl;
-    for (int i = 0; i < 3; i++) {
-      cout << circle_data[i] << endl;
-    }
-  }
+  figure_type = get_figure_type(figure);
 
   return 0;
 }
