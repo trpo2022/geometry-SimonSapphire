@@ -1,6 +1,10 @@
 #include <iostream>
+#include <iomanip>
 #include <regex>
 #include <string>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 using namespace std;
 
@@ -69,6 +73,10 @@ void get_circle_data(string figure, double circle_data[]) {
   }
 }
 
+double get_circle_perimeter(double radius) {
+  return (2 * radius * M_PI);
+}
+
 // #END / FIGURE: circle;
 
 // #START / FIGURE: triangle;
@@ -115,6 +123,17 @@ void get_triangle_data(string figure, double triangle_data[]) {
   }
 }
 
+double get_triangle_perimeter(double figure_data[]) {
+  // sides of triangle;
+  double a, b, c;
+  
+  a = sqrt(powf(figure_data[0]-figure_data[2], 2) + powf(figure_data[1]-figure_data[3], 2));
+  b = sqrt(powf(figure_data[2]-figure_data[4], 2) + powf(figure_data[3]-figure_data[5], 2));
+  c = sqrt(powf(figure_data[4]-figure_data[0], 2) + powf(figure_data[5]-figure_data[1], 2));
+
+  return a + b + c;
+}
+
 // #END / FIGURE: triangle;
 
 
@@ -157,6 +176,13 @@ void get_figure_data(string figure, string figure_type, double figure_data[]) {
   else if (figure_type == "triangle") get_triangle_data(figure, figure_data);
 }
 
+double get_figure_perimeter(string figure_type, double figure_data[]) {
+    if (figure_type == "circle") return get_circle_perimeter(figure_data[2]);
+    else if (figure_type == "triangle") return get_triangle_perimeter(figure_data);
+
+    return 0;
+}
+
 // #END / BASE() functions;
 
 int get_figure_array_length(string figure_type) {
@@ -168,6 +194,7 @@ int get_figure_array_length(string figure_type) {
 
 int main(int argc, char** argv) {
   string figure, figure_type;
+  double f_perimeter;
   
   cout << "Enter a figure: " << endl;
   getline(cin, figure);
@@ -178,9 +205,8 @@ int main(int argc, char** argv) {
   double *figure_data = new double[data_array_len];
   get_figure_data(figure, figure_type, figure_data);
 
-  for (int i = 0; i < data_array_len; i++) {
-    cout << figure_data[i] << endl;
-  }
+  f_perimeter = get_figure_perimeter(figure_type, figure_data);
+  cout << fixed << setprecision(3) << f_perimeter << endl;
 
   // *Clear memory
   delete []figure_data;
