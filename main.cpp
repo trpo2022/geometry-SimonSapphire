@@ -93,7 +93,32 @@ bool is_triangle_valid(string figure) {
   return true;
 }
 
+void get_triangle_data(string figure, double triangle_data[]) {
+  int k = 0;
+  string temp;
+  cmatch result;
+
+  regex_match(
+      figure.c_str(), result,
+      regex(
+          R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\)\))"));
+  for (size_t i = 0; i < result.size(); i++) {
+    try {
+      temp = result[i];
+      if (temp[0] != '.') {
+        triangle_data[k] = stod(result[i]);
+        k++;
+      }
+    } catch (...) {
+      cout << "";
+    }
+  }
+}
+
 // #END / FIGURE: triangle;
+
+
+// #START / BASE() functions;
 
 bool is_figure_type_valid(string figure_type) {
   array<string, 2> figure_types = {"circle", "triangle"};
@@ -127,13 +152,38 @@ string get_figure_type(string figure) {
   return figure_type;
 }
 
+void get_figure_data(string figure, string figure_type, double figure_data[]) {
+  if (figure_type == "circle") get_circle_data(figure, figure_data);
+  else if (figure_type == "triangle") get_triangle_data(figure, figure_data);
+}
+
+// #END / BASE() functions;
+
+int get_figure_array_length(string figure_type) {
+  if (figure_type == "circle") return 3;
+  else if (figure_type == "triangle") return 8;
+
+  return 0;
+}
+
 int main(int argc, char** argv) {
   string figure, figure_type;
-
+  
   cout << "Enter a figure: " << endl;
   getline(cin, figure);
   figure_type = get_figure_type(figure);
-  is_figure_valid(figure, figure_type);
+  if(!is_figure_valid(figure, figure_type)) return -1;
+
+  int data_array_len = get_figure_array_length(figure_type);
+  double *figure_data = new double[data_array_len];
+  get_figure_data(figure, figure_type, figure_data);
+
+  for (int i = 0; i < data_array_len; i++) {
+    cout << figure_data[i] << endl;
+  }
+
+  // *Clear memory
+  delete []figure_data;
 
   return 0;
 }
