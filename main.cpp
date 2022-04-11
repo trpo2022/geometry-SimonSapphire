@@ -4,66 +4,53 @@
 
 using namespace std;
 
-int check_circle(string figure) {
+// #START / FIGURE: circle;
+
+bool is_circle_valid(string figure) {
   if (!regex_match(figure, regex(R"(^circle\W+.*)"))) {
     cout << "Wrong name of figure: expected 'circle'" << endl;
-    return 1;
+    return false;
   } else if (!regex_match(figure, regex(R"(^circle\(.*)"))) {
     cout << "Wrong character: Expected '('" << endl;
-    return 2;
+    return false;
   } else if (!regex_match(figure, regex(R"(^circle\((\d+(\.\d+)?)(\s).*)"))) {
     cout << "Wrong digit: Expected <double>" << endl;
-    return 3;
+    return false;
   } else if (!regex_match(
                  figure,
                  regex(R"(^circle\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?).*)"))) {
     cout << "Wrong digit: Expected <double>" << endl;
-    return 4;
+    return false;
   } else if (
       !regex_match(
           figure,
           regex(
               R"(^circle\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)\W+.*)"))) {
     cout << "Wrong digit: Expected <double>" << endl;
-    return 5;
+    return false;
   } else if (
       !regex_match(
           figure,
           regex(
               R"(^circle\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\)).*)"))) {
     cout << "Wrong character: Expected ')'" << endl;
-    return 6;
+    return false;
   } else if (
       regex_match(
           figure,
           regex(
               R"(^circle\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\)).+)"))) {
     cout << "An unexpected character at the end of the line" << endl;
-    return 7;
+    return false;
   }
 
-  return 200;
+  return true;
 }
 
-string get_figure_type(string figure) {
-  string figure_type;
-
-  for (auto &ch : figure) {
-    if (ch == '('){
-      break;
-    }
-    figure_type += ch;
-  }
-
-  return figure_type;
-}
-
-void get_circle_data(string figure, double circle_data[], string& figure_type) {
+void get_circle_data(string figure, double circle_data[]) {
   int k = 0;
   string temp;
   cmatch result;
-
-  figure_type = "circle";
 
   regex_match(
       figure.c_str(), result,
@@ -82,12 +69,71 @@ void get_circle_data(string figure, double circle_data[], string& figure_type) {
   }
 }
 
+// #END / FIGURE: circle;
+
+// #START / FIGURE: triangle;
+
+bool is_triangle_valid(string figure) {
+  if (!regex_match(figure, regex(R"(^triangle\W+.*)"))) {
+    cout << "Wrong name of figure: expected 'triangle'" << endl;
+    return false;
+  } else if (!regex_match(figure, regex(R"(^triangle\(\(.*)"))) {
+    cout << "Wrong character: Expected '(('" << endl;
+    return false;
+  } else if (!regex_match(figure, regex(R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\W+.*)"))) {
+    cout << "Wrong digit: Expected <double>" << endl;
+    return false;
+  } else if (!regex_match(figure, regex(R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\)\).*)"))) {
+    cout << "Wrong character: Expected '))'" << endl;
+    return false;
+  } else if (regex_match(figure, regex(R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\)\).+)"))) {
+    cout << "An unexpected character at the end of the line" << endl;
+    return false;
+  }
+  return true;
+}
+
+// #END / FIGURE: triangle;
+
+bool is_figure_type_valid(string figure_type) {
+  array<string, 2> figure_types = {"circle", "triangle"};
+  
+  for(size_t i = 0; i < figure_types.size(); i++){
+    if (figure_type == figure_types[i]) return true;
+  }
+  cout << "Invalid figure type: " << figure_type << endl;
+  return false;
+}
+
+bool is_figure_valid(string figure, string figure_type){
+  if(!is_figure_type_valid(figure_type)) return false;
+
+  if (figure_type == "circle") return is_circle_valid(figure);
+  else if (figure_type == "triangle") return is_triangle_valid(figure);
+  
+  return false;
+}
+
+string get_figure_type(string figure) {
+  string figure_type = "";
+
+  for (auto &ch : figure) {
+    if (ch == '('){
+      break;
+    }
+    figure_type += ch;
+  }
+
+  return figure_type;
+}
+
 int main(int argc, char** argv) {
   string figure, figure_type;
 
   cout << "Enter a figure: " << endl;
   getline(cin, figure);
   figure_type = get_figure_type(figure);
+  is_figure_valid(figure, figure_type);
 
   return 0;
 }
