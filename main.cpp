@@ -1,5 +1,5 @@
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <regex>
 #include <string>
 
@@ -73,9 +73,9 @@ void get_circle_data(string figure, double circle_data[]) {
   }
 }
 
-double get_circle_perimeter(double radius) {
-  return (2 * radius * M_PI);
-}
+double calc_circle_perimeter(double radius) { return (2 * radius * M_PI); }
+
+double calc_circle_area(double radius) { return (powf(radius, 2) * M_PI); }
 
 // #END / FIGURE: circle;
 
@@ -88,13 +88,25 @@ bool is_triangle_valid(string figure) {
   } else if (!regex_match(figure, regex(R"(^triangle\(\(.*)"))) {
     cout << "Wrong character: Expected '(('" << endl;
     return false;
-  } else if (!regex_match(figure, regex(R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\W+.*)"))) {
+  } else if (
+      !regex_match(
+          figure,
+          regex(
+              R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\W+.*)"))) {
     cout << "Wrong digit: Expected <double>" << endl;
     return false;
-  } else if (!regex_match(figure, regex(R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\)\).*)"))) {
+  } else if (
+      !regex_match(
+          figure,
+          regex(
+              R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\)\).*)"))) {
     cout << "Wrong character: Expected '))'" << endl;
     return false;
-  } else if (regex_match(figure, regex(R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\)\).+)"))) {
+  } else if (
+      regex_match(
+          figure,
+          regex(
+              R"(^triangle\(\((\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)(,\s?)(\d+(\.\d+)?)(\s)(\d+(\.\d+)?)\)\).+)"))) {
     cout << "An unexpected character at the end of the line" << endl;
     return false;
   }
@@ -123,38 +135,58 @@ void get_triangle_data(string figure, double triangle_data[]) {
   }
 }
 
-double get_triangle_perimeter(double figure_data[]) {
+double calc_triangle_perimeter(double figure_data[]) {
   // sides of triangle;
   double a, b, c;
-  
-  a = sqrt(powf(figure_data[0]-figure_data[2], 2) + powf(figure_data[1]-figure_data[3], 2));
-  b = sqrt(powf(figure_data[2]-figure_data[4], 2) + powf(figure_data[3]-figure_data[5], 2));
-  c = sqrt(powf(figure_data[4]-figure_data[0], 2) + powf(figure_data[5]-figure_data[1], 2));
+
+  a = sqrt(powf(figure_data[0] - figure_data[2], 2) +
+           powf(figure_data[1] - figure_data[3], 2));
+  b = sqrt(powf(figure_data[2] - figure_data[4], 2) +
+           powf(figure_data[3] - figure_data[5], 2));
+  c = sqrt(powf(figure_data[4] - figure_data[0], 2) +
+           powf(figure_data[5] - figure_data[1], 2));
 
   return a + b + c;
 }
 
-// #END / FIGURE: triangle;
+double calc_triangle_area(double figure_data[]) {
+  // sides of triangle;
+  double a, b, c;
 
+  a = sqrt(powf(figure_data[0] - figure_data[2], 2) +
+           powf(figure_data[1] - figure_data[3], 2));
+  b = sqrt(powf(figure_data[2] - figure_data[4], 2) +
+           powf(figure_data[3] - figure_data[5], 2));
+  c = sqrt(powf(figure_data[4] - figure_data[0], 2) +
+           powf(figure_data[5] - figure_data[1], 2));
+
+  // semi-perimeter;
+  double s = (a + b + c) / 2;
+
+  return sqrt(s * (s - a) * (s - b) * (s - c));
+}
+// #END / FIGURE: triangle;
 
 // #START / BASE() functions;
 
 bool is_figure_type_valid(string figure_type) {
   array<string, 2> figure_types = {"circle", "triangle"};
-  
-  for(size_t i = 0; i < figure_types.size(); i++){
+
+  for (size_t i = 0; i < figure_types.size(); i++) {
     if (figure_type == figure_types[i]) return true;
   }
   cout << "Invalid figure type: " << figure_type << endl;
   return false;
 }
 
-bool is_figure_valid(string figure, string figure_type){
-  if(!is_figure_type_valid(figure_type)) return false;
+bool is_figure_valid(string figure, string figure_type) {
+  if (!is_figure_type_valid(figure_type)) return false;
 
-  if (figure_type == "circle") return is_circle_valid(figure);
-  else if (figure_type == "triangle") return is_triangle_valid(figure);
-  
+  if (figure_type == "circle")
+    return is_circle_valid(figure);
+  else if (figure_type == "triangle")
+    return is_triangle_valid(figure);
+
   return false;
 }
 
@@ -162,7 +194,7 @@ string get_figure_type(string figure) {
   string figure_type = "";
 
   for (auto &ch : figure) {
-    if (ch == '('){
+    if (ch == '(') {
       break;
     }
     figure_type += ch;
@@ -172,44 +204,61 @@ string get_figure_type(string figure) {
 }
 
 void get_figure_data(string figure, string figure_type, double figure_data[]) {
-  if (figure_type == "circle") get_circle_data(figure, figure_data);
-  else if (figure_type == "triangle") get_triangle_data(figure, figure_data);
+  if (figure_type == "circle")
+    get_circle_data(figure, figure_data);
+  else if (figure_type == "triangle")
+    get_triangle_data(figure, figure_data);
 }
 
-double get_figure_perimeter(string figure_type, double figure_data[]) {
-    if (figure_type == "circle") return get_circle_perimeter(figure_data[2]);
-    else if (figure_type == "triangle") return get_triangle_perimeter(figure_data);
+double calc_figure_perimeter(string figure_type, double figure_data[]) {
+  if (figure_type == "circle")
+    return calc_circle_perimeter(figure_data[2]);
+  else if (figure_type == "triangle")
+    return calc_triangle_perimeter(figure_data);
 
-    return 0;
+  return 0;
+}
+
+double calc_figure_area(string figure_type, double figure_data[]) {
+  if (figure_type == "circle")
+    return calc_circle_area(figure_data[2]);
+  else if (figure_type == "triangle")
+    return calc_triangle_area(figure_data);
+
+  return 0;
 }
 
 // #END / BASE() functions;
 
 int get_figure_array_length(string figure_type) {
-  if (figure_type == "circle") return 3;
-  else if (figure_type == "triangle") return 8;
+  if (figure_type == "circle")
+    return 3;
+  else if (figure_type == "triangle")
+    return 8;
 
   return 0;
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   string figure, figure_type;
-  double f_perimeter;
-  
+  double f_perimeter, f_area;
+
   cout << "Enter a figure: " << endl;
   getline(cin, figure);
   figure_type = get_figure_type(figure);
-  if(!is_figure_valid(figure, figure_type)) return -1;
+  if (!is_figure_valid(figure, figure_type)) return -1;
 
   int data_array_len = get_figure_array_length(figure_type);
   double *figure_data = new double[data_array_len];
   get_figure_data(figure, figure_type, figure_data);
 
-  f_perimeter = get_figure_perimeter(figure_type, figure_data);
-  cout << fixed << setprecision(3) << f_perimeter << endl;
+  f_perimeter = calc_figure_perimeter(figure_type, figure_data);
+  f_area = calc_figure_area(figure_type, figure_data);
+  cout << "perimeter = " << fixed << setprecision(3) << f_perimeter << endl;
+  cout << "area = " << fixed << setprecision(3) << f_area << endl;
 
   // *Clear memory
-  delete []figure_data;
+  delete[] figure_data;
 
   return 0;
 }
