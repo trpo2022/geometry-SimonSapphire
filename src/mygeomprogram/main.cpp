@@ -6,20 +6,24 @@
 
 using namespace std;
 
-int main(int argc, char **argv) {
+int
+main(int argc, char** argv)
+{
   string figure = " ", figure_type;
   double f_perimeter, f_area;
 
   while (true) {
     cout << "Enter a figure: " << endl;
     getline(cin, figure);
-    if (figure == "") return 0;
+    if (figure == "")
+      return 0;
 
     figure_type = get_figure_type(figure);
-    if (!is_figure_valid(figure, figure_type)) return -1;
+    if (!is_figure_valid(figure, figure_type))
+      return -1;
 
     int data_array_len = get_figure_array_length(figure_type);
-    double *figure_data = new double[data_array_len];
+    double* figure_data = new double[data_array_len];
     get_figure_data(figure, figure_type, figure_data);
 
     f_perimeter = calc_figure_perimeter(figure_type, figure_data);
