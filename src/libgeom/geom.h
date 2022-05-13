@@ -9,6 +9,8 @@ bool is_circle_valid(string figure);
 void get_circle_data(string figure, double circle_data[]);
 double calc_circle_perimeter(double radius);
 double calc_circle_area(double radius);
+double segment_length(double x1, double y1, double x2, double y2);
+bool is_CC_intersected(double circle_data_1[], double circle_data_2[]);
 // #END / FIGURE: circle;
 
 // #START / FIGURE: triangle;

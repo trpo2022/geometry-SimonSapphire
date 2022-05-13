@@ -4,3 +4,4 @@ bin/mygeomprogram
 *.o
 *.a
 a.out
+presets/
