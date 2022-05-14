@@ -1,6 +1,7 @@
 #My Presets
 .vscode
 bin/mygeomprogram
+bin/mygeomprogram-test
 *.o
 *.a
 a.out
