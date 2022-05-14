@@ -6,7 +6,8 @@
 
 using namespace std;
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
   int triangles_amount, circles_amount;
   string figure = " ", figure_type;
   double f_perimeter, f_area;
@@ -18,10 +19,12 @@ int main(int argc, char** argv) {
   cout << "Enter a figure: " << endl;
   while (true) {
     getline(cin, figure);
-    if (figure == "") break;
+    if (figure == "")
+      break;
 
     figure_type = get_figure_type(figure);
-    if (!is_figure_valid(figure, figure_type)) break;
+    if (!is_figure_valid(figure, figure_type))
+      break;
 
     int data_array_len = get_figure_array_length(figure_type);
     double* figure_data = new double[data_array_len];
@@ -52,41 +55,13 @@ int main(int argc, char** argv) {
     delete[] figure_data;
   }
 
-  int pos = 1;
-  // print circles data
-  if (circles_amount > 0) {
-    for (int i = 0; i < circles_amount; i++) {
-      cout << endl << pos << ". " << circle_strings[i] << endl;
-      cout << "   perimeter = " << fixed << setprecision(3)
-           << circle_array[i][3] << endl;
-      cout << "   area = " << fixed << setprecision(3) << circle_array[i][4]
-           << endl;
-      pos++;
-      cout << "   intersetcs: " << endl;
-      for (int j = 0; j < circles_amount; j++) {
-        if (j != i && is_CC_intersected(circle_array[i], circle_array[j])) {
-          cout << "     " << j + 1 << ". "
-               << "circle" << endl;
-        }
-      }
-    }
-  }
-
-  // print triangles data
-  if (triangles_amount > 0) {
-    for (int i = 0; i < triangles_amount; i++) {
-      cout << pos << ". " << triangle_strings[i] << endl;
-      cout << "   perimeter = " << fixed << setprecision(3)
-           << triangle_array[i][8] << endl;
-      cout << "   area = " << fixed << setprecision(3) << triangle_array[i][9]
-           << endl
-           << endl;
-      pos++;
-    }
-  }
-
-  // cout << "perimeter = " << fixed << setprecision(3) << f_perimeter << endl;
-  // cout << "area = " << fixed << setprecision(3) << f_area << endl << endl;
+  print_CT_data(
+          circles_amount,
+          triangles_amount,
+          circle_strings,
+          triangle_strings,
+          circle_array,
+          triangle_array);
 
   return 0;
 }
